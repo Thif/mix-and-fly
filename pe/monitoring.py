@@ -6,10 +6,12 @@ from utils import BlendDataset, COMPONENT_NAMES, PROPERTY_NAMES,PREDICTED_PROPER
 import numpy as np
 from page_utils import remove_top
 import plotly.graph_objects as go
+from datetime import datetime
 
 INIT_ID=546
 max_steps=30
-
+PARAMS=COMPONENT_NAMES+["Density","Particulate Matter"]
+THRESHOLD=0.06
 
 @st.cache_data
 def get_selected_row(selected_id,targets):
@@ -90,12 +92,13 @@ def monitoring_page():
         with col31:
             pid_placeholder = st.empty()
             df_placeholder = st.empty()
+            deviation_count_placeholder=st.empty()
             
         with col32:
             
             line_placeholder = st.empty()
             line2_placeholder = st.empty()
-            bar_placeholder = st.empty()
+
         # Simulation loop
         while True:
             if st.session_state.streaming:
@@ -105,13 +108,21 @@ def monitoring_page():
                 amplitude = 0.04  # Amplitude of the oscillation
                 noise_level = 0.01  # Level of random noise
 
+                if "deviations" not in st.session_state:
+                    st.session_state.deviations = []
 
                 for j in range(num_bars):
                     sine_wave = amplitude * np.sin(2 * np.pi  * frequency * (t-j*10))
-                    bar_values[j] = max_thresholds[j] + sine_wave+np.random.normal(0, noise_level)  # Replace with your real data source
+                    bar_values[j] = max_thresholds[j] *(1+ sine_wave+np.random.normal(0, noise_level))  # Replace with your real data source
+                    if abs((bar_values[j] - max_thresholds[j])/bar_values[j])>THRESHOLD:
+                        st.session_state.deviations+=[{"date":datetime.now(),"parameter":PARAMS[j],"value":bar_values[j],"target":max_thresholds[j]}]
+
+
+
+
                 
                 #update colors
-                shape_colors=["#0E1117" if abs(bar_values[i] - max_thresholds[i])<0.05 else "teal" for i in range(num_bars)]
+                shape_colors=["#0E1117" if abs((bar_values[i] - max_thresholds[i])/bar_values[i])<THRESHOLD else "teal" for i in range(num_bars)]
                 
                 #time values
                 timestamps+=[t]
@@ -182,7 +193,7 @@ def monitoring_page():
                 # Function to highlight values above the threshold
 
 
-                highlight_cols = [COMPONENT_NAMES[i].split()[0] for i in range(len(COMPONENT_NAMES)) if abs(bar_values[i] - max_thresholds[i]) > 0.05]
+                highlight_cols = [COMPONENT_NAMES[i].split()[0] for i in range(len(COMPONENT_NAMES)) if abs(bar_values[i] - max_thresholds[i]) > THRESHOLD]
 
                 if len(highlight_cols)>0:
                 # Display the DataFrame with highlighted values
@@ -259,6 +270,7 @@ def monitoring_page():
                 # Wait for a second before next update
                 time.sleep(1)
                 t+=1
+                deviation_count_placeholder.write(f"Number of deviations recorded: {len(st.session_state.deviations)}")
             else:
                 # If not streaming, break the loop
                 break

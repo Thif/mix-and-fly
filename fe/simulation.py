@@ -31,7 +31,7 @@ def simulation_page():
         selected_row = df[df['ID'] == selected_id]
 
         # Display the selected row
-        st.subheader("Selected Row Details")
+        st.write("Initial fractions:")
         st.dataframe(selected_row[COMPONENT_NAMES].transpose())
 
         if "selected_id" not in st.session_state:
@@ -62,13 +62,14 @@ def simulation_page():
         df=st.session_state.metric_df
         if st.session_state.metric_df is not None:
 
-
+            st.write("Best metrics with corresponding volume fractions")
             col_metric, col_frac = st.columns([2, 1])
+            
             
             with col_metric:
                 
                 options = ["Sustainability", "Safety", "Performance", "Cost"]
-                selection = st.pills("Best metrics with volume fractions",options, default="Performance")
+                selection = st.pills("",options, default="Performance")
 
 
                 df_selected_max = df[df[selection] == df[selection].max()]
@@ -87,17 +88,27 @@ def simulation_page():
                     st.metric(label=selection, value=f'{round(new_value_max*100)} %', delta=round(new_value_max-st.session_state.init_safe,2), border=True)
             with col_frac:
                 if selection=="Cost":
-                    st.dataframe(df_selected_min[COMPONENT_NAMES].transpose())
+                    data_min=df_selected_min[COMPONENT_NAMES+["Compliant"]].iloc[0]
+                    st.dataframe(data_min.iloc[:5].transpose())
+                    if data_min["Compliant"]:
+                        st.success("✅ Jet-A compliant")
+                    else:
+                        st.error("❌ Not Jet-A compliant")
                 else:
-                    st.dataframe(df_selected_max[COMPONENT_NAMES].transpose())
+                    data_max=df_selected_max[COMPONENT_NAMES+["Compliant"]].iloc[0]
+                    st.dataframe(data_max.iloc[:5].transpose())
+                    if data_max["Compliant"]:
+                        st.success("✅ Jet-A compliant")
+                    else:
+                        st.error("❌ Not Jet-A compliant")
 
             
             df_melted = df[PREDICTED_PROPERTY_NAMES].melt()
 
             # Create a box plot using Plotly Express
             fig = px.box(df_melted, x='variable', y='value', title="Simulated properties range")
-            # Update the box color to light red (RGB: 255, 200, 200)
-            light_red = 'rgba(255, 200, 200)'  # Use RGBA for transparency if needed
+
+
 
             # Update traces to set the box color
             fig.update_traces(marker_color="#1ABC9C", line_color="#1ABC9C")  # Set line color to red

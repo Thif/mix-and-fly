@@ -65,6 +65,7 @@ fe_readme_page = st.Page(
 )
 monitoring_page = st.Page("pe/monitoring.py", title="Monitoring", icon=":material/monitor:")
 document_page = st.Page("pe/document.py", title="Report", icon=":material/bug_report:")
+summary_page = st.Page("pe/summary.py", title="Summary", icon=":material/folder:")
 
 pe_readme_page = st.Page(
     "pe/read_me.py",
@@ -78,7 +79,7 @@ simulation_page = st.Page("fe/simulation.py", title="Simulation", icon=":materia
 
 account_pages = [logout_page]
 ds_pages=[ds_readme_page,model_page,explain_page,report_page]
-pe_pages=[pe_readme_page,monitoring_page,document_page]
+pe_pages=[pe_readme_page,monitoring_page,summary_page,document_page]
 fe_pages=[fe_readme_page,library_page,simulation_page,design_page]
 
 

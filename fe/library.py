@@ -39,12 +39,14 @@ def library_page():
                 step=0.01  # Step size for the slider
             )
             fractions.append(fraction_range)
+
+        #is_compliant = st.checkbox("Jet-A compliant")
             
     with col2:
 
         df=load_df_bd()
 
-
+  
         df = df[
         (df['Diesel Fraction'].between(fractions[0][0], fractions[0][1])) &
         (df['Biofuel Fraction'].between(fractions[1][0], fractions[1][1])) &
@@ -52,17 +54,19 @@ def library_page():
         (df['Additives Fraction'].between(fractions[3][0], fractions[3][1])) &
         (df['Waste Oil Fraction'].between(fractions[4][0], fractions[4][1]))
     ]
+        #df=df[df.Compliant==is_compliant]
 
         # Create a ternary scatter plot
         fig = px.scatter_ternary(df, a="Safety", b="Performance", c="Sustainability", 
-                                    color="Cost",
+                                    color="Compliant",
                                     size="Cost",
                                     opacity=0.8,
                                   labels={"Safety": "Safety", "Performance": "Performance", "Sustainability": "Sustainability"},
                                   hover_name="ID",
                                           width=500,  
         height=500 ,
-        color_continuous_scale='GnBu')
+        #color_continuous_scale='GnBu'
+        )
 
 
 
@@ -71,18 +75,24 @@ def library_page():
         selected_data = st.plotly_chart(fig, on_select="rerun")
         if len(selected_data.selection.point_indices)>0:
             selected_index=selected_data.selection.point_indices[0] # Access selected point indices
+            print(selected_index)
 
 
     with col3:
         if selected_index:
             df["plot_index"]=df.reset_index().index
             filtered_df = df[df.plot_index==selected_index]
-
+            print(filtered_df)
             #fractions
             st.write("selected blend details:")
             df_frac=filtered_df[COMPONENT_NAMES].transpose()
-            #df_frac.columns=[""]          
+
             st.dataframe(df_frac)
+
+            if filtered_df["Compliant"].values[0]:
+                st.success("✅ Jet-A compliant")
+            else:
+                st.error("❌ Not Jet-A compliant")
 
             # Properties
             transposed_df=filtered_df[PROPERTY_NAMES].melt()

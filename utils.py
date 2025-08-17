@@ -30,19 +30,19 @@ comp_dict={
 
 
 compliance_criteria = {
-    "Density": (1.0, 3.0),  # Example range for normalized density
-    "Viscosity": (0.5, 2.5),  # Example range for normalized viscosity
-    "Heating Value": (2.0, 4.0),  # Example range for normalized heating value
-    "Cetane Number": (1.0, 3.0),  # Example range for cetane number
+    "Density": (0, 4.0),  # Example range for normalized density
+    "Viscosity": (0, 4),  # Example range for normalized viscosity
+    "Heating Value": (0, 4.0),  # Example range for normalized heating value
+    "Cetane Number": (0, 4.0),  # Example range for cetane number
     "Freezing Point": (-4.0, 0.0),  # Example range for freezing point
-    "Smoke Point": (2.0, 4.0),  # Example range for smoke point
-    "Thermal Stability": (1.0, 3.0),  # Example range for thermal stability
-    "Water Content": (0.0, 1.0),  # Example range for water content
-    "Particulate Matter": (0.0, 1.0),  # Example range for particulate matter
-    "Corrosiveness": (0.0, 2.0),  # Example range for corrosiveness
-    "Diesel Fraction": (0.0, 2.0),  # Example range for diesel fraction
-    "Biofuel Fraction": (0.0, 2.0),  # Example range for biofuel fraction
-    "Synthetic Fuel Fraction": (0.0, 2.0),  # Example range for synthetic fuel fraction
+    "Smoke Point": (0.0, 4.0),  # Example range for smoke point
+    "Thermal Stability": (0.0, 4.0),  # Example range for thermal stability
+    "Water Content": (0.0, 4.0),  # Example range for water content
+    "Particulate Matter": (0.0, 4.0),  # Example range for particulate matter
+    "Corrosiveness": (0.0, 4.0),  # Example range for corrosiveness
+    "Diesel Fraction": (0.0, 4.0),  # Example range for diesel fraction
+    "Biofuel Fraction": (0.0, 4.0),  # Example range for biofuel fraction
+    "Synthetic Fuel Fraction": (0.0, 1.0),  # Example range for synthetic fuel fraction
     "Additives Fraction": (0.0, 1.0),  # Example range for additives fraction
     "Waste Oil Fraction": (0.0, 1.0),  # Example range for waste oil fraction
 }
@@ -52,7 +52,7 @@ PROPERTY_NAMES=[v for (k,v) in comp_dict.items() if "Fraction" not in v]
 PREDICTED_PROPERTY_NAMES=[v+" (Predicted)" for v in PROPERTY_NAMES]
 ORIGINAL_COMPONENT_NAMES=[k for (k,v) in comp_dict.items() if "Fraction" in v]
 COMPONENT_NAMES=[v for (k,v) in comp_dict.items() if "Fraction" in v]
-METRIC_NAMES=["Safety","Performance","Sustainability","Cost"]
+METRIC_NAMES=["Safety","Performance","Sustainability","Cost","Compliant"]
 
 @st.cache_resource
 def load_tf():
@@ -98,17 +98,28 @@ def calculate_metrics(X,X_comp):
     scaler=MinMaxScaler()
     df_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
     x_comp_scaled=pd.DataFrame(scaler.fit_transform(X_comp), columns=X_comp.columns)
-    print(x_comp_scaled)
-    performance=df_scaled["Heating Value"]*df_scaled["Cetane Number"]*(1-df_scaled["Viscosity"])*(x_comp_scaled["Diesel Fraction"])
-    safety=(
-    (1 - df_scaled["Freezing Point"]) * 
+
+    performance = np.average(pd.concat([
+        df_scaled["Heating Value"],
+        df_scaled["Cetane Number"],
+        (1 - df_scaled["Viscosity"]),
+        x_comp_scaled["Diesel Fraction"]
+    ], axis=1),weights=[1,1,1,5],axis=1)  # Calculate the mean across the rows
+
+    safety=np.average(pd.concat([
+    (1 - df_scaled["Freezing Point"]),
     (1 - df_scaled["Thermal Stability"])
-    )
-    sustainability=(1-df_scaled["Water Content"])*(1-df_scaled["Particulate Matter"])*(x_comp_scaled["Biofuel Fraction"])*(x_comp_scaled["Synthetic Fuel Fraction"])
+    ],axis=1),weights=[1,5],axis=1)
+
+    sustainability=np.average(pd.concat([(1-df_scaled["Water Content"]),
+                            (1-df_scaled["Particulate Matter"]),
+                            (x_comp_scaled["Biofuel Fraction"]),
+                            (x_comp_scaled["Synthetic Fuel Fraction"])],axis=1),weights=[1,1,5,1],axis=1)
+        
     cost=X_comp[COMPONENT_NAMES].multiply(COMP_COST).sum(axis=1)
     compliant = pd.concat([X,X_comp],axis=1).apply(check_compliance, axis=1)
 
-    return round(performance,2),round(safety,2),round(sustainability,2),round(cost,2),round(compliant,2)
+    return np.round(performance,2),np.round(safety,2),np.round(sustainability,2),np.round(cost,2),np.round(compliant,2)
 
 def get_predictions_for_blend(X):
 
@@ -143,9 +154,9 @@ class BlendDataset():
 
     def add_metrics(self,df,predicted=False):
         if predicted:
-            df["Performance"],df["Safety"],df["Sustainability"],df["Cost"],df["compliant"]=calculate_metrics(df[PREDICTED_PROPERTY_NAMES],df[COMPONENT_NAMES])
+            df["Performance"],df["Safety"],df["Sustainability"],df["Cost"],df["Compliant"]=calculate_metrics(df[PREDICTED_PROPERTY_NAMES],df[COMPONENT_NAMES])
         else:
-            df["Performance"],df["Safety"],df["Sustainability"],df["Cost"],df["compliant"]=calculate_metrics(df[PROPERTY_NAMES],df[COMPONENT_NAMES])
+            df["Performance"],df["Safety"],df["Sustainability"],df["Cost"],df["Compliant"]=calculate_metrics(df[PROPERTY_NAMES],df[COMPONENT_NAMES])
 
         return df
 

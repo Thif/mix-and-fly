@@ -15,7 +15,7 @@ st.header(f"{st.session_state.role} info page")
 
 st.write(f"You will find here a list of the pages you have access to, each page contains a tool that will help you contribute to better design of sustainable aviation fuels ✈️ ")
 
-with st.expander("⚙️ Model"):
+with st.expander("➕ Model"):
 
     st.write("In this section you can check the cross validation metrics on the models, and investigate potential outliers")
     st.markdown("- Select the blend property of interest")
@@ -23,7 +23,7 @@ with st.expander("⚙️ Model"):
 
     st.page_link("ds/model.py", label="Go to page", icon="🚀")
 
-with st.expander("⚙️ Explainability"):
+with st.expander("➕ Explainability"):
 
     st.write("In this section you can explore the contribution of the features to each blend property model")
     st.markdown("- Select the blend property of interest")
@@ -31,7 +31,7 @@ with st.expander("⚙️ Explainability"):
 
     st.page_link("ds/explainability.py", label="Go to page", icon="🚀")
 
-with st.expander("⚙️ Add blend"):
+with st.expander("➕ Add blend"):
 
     st.write("In this section you can add a new blend to the database")
     st.markdown("- Add the pdf report from the Certificate")

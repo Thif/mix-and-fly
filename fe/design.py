@@ -1,8 +1,9 @@
 import streamlit as st
 import plotly.graph_objects as go
-from utils import BlendDataset, COMPONENT_NAMES, PROPERTY_NAMES,PREDICTED_PROPERTY_NAMES
+from utils import BlendDataset, COMPONENT_NAMES, PROPERTY_NAMES,METRIC_NAMES
 import numpy as np
 from page_utils import remove_top
+from datetime import datetime
 
 def design_page():
 
@@ -24,21 +25,21 @@ def design_page():
         
         with col11:
             fractions = []
-
-            for p in PROPERTY_NAMES[:5]:
+            init_val=[1.0,1.0,1.0,1.0,-1.0]
+            for i,p in enumerate(PROPERTY_NAMES[:5]):
                 # Create a range slider for each component
                 fraction_range = st.slider(
                     f"{p}",
-                    -4.0, 4.0, 0.0 # Step size for the slider
+                    -4.0, 4.0, init_val[i] # Step size for the slider
                 )
                 fractions.append(fraction_range)
 
         with col12:
-            for p in PROPERTY_NAMES[5:]:
+            for i,p in enumerate(PROPERTY_NAMES[5:]):
                 # Create a range slider for each component
                 fraction_range = st.slider(
                     f"{p}",
-                    -4.0, 4.0, 0.0 # Step size for the slider
+                    -4.0, 4.0, 1.0 # Step size for the slider
                 )
                 fractions.append(fraction_range)
 
@@ -56,6 +57,14 @@ def design_page():
 
             # Get the closest row
             closest_row = df.iloc[closest_index]
+            closest_row["date"]=datetime.now()
+
+            if "favorites" not in st.session_state:
+                st.session_state.favorites = []
+
+            if st.button("Add blend as favorite"):
+                st.session_state.favorites+=[closest_row[["date","ID"]+METRIC_NAMES]]
+                st.success("Added to favorites ❤️")
             
 
             
@@ -73,6 +82,12 @@ def design_page():
         with col24:
             st.metric(label="Cost", value=f'{round(closest_row["Cost"] ,2):.2f} $/l',border=True)
             # Property names
+
+        
+        if closest_row["Compliant"]:
+            st.success("✅ Jet-A compliant")
+        else:
+            st.error("❌ Not Jet-A compliant")
 
 
 

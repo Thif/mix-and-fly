@@ -14,11 +14,13 @@ def report_page():
         initial_sidebar_state="collapsed"
     )
     remove_top()
-    col1,col2=st.columns([1,6])
-    with col1:
-        st.image("./images/logo_page.png")
-    with col2:
-        st.title("🚧 Page under construction 🚧")
+
+    st.markdown(
+        """
+        <h1 style="text-align: center;">🚧 Page under construction 🚧</h1>
+        """,
+        unsafe_allow_html=True
+    )
         
     # File uploader for PDF report
     pdf_file = st.file_uploader("Upload PDF Report", type=["pdf"])
@@ -29,7 +31,7 @@ def report_page():
         
     st.write("Results from LLM processing:")
 
-    st.dataframe(dict(zip(COMPONENT_NAMES, [0.5,0,0.5,0,0])))
+    st.dataframe(pd.DataFrame(zip(COMPONENT_NAMES, [0.5,0,0.5,0,0]),columns=["component","%"]).set_index("component").transpose())
     if st.button("Add New Blend to Database"):
         # Here you would add the logic to save the new blend to the database
         st.success("New blend added to the database successfully!")
