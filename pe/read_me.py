@@ -39,6 +39,6 @@ with st.expander("➕ Document deviation"):
 # Example session state for favorites
 if "deviations" in st.session_state:
     num_deviations = len(st.session_state.deviations) 
-    st.markdown(f"##### ⚠️ You have **{num_deviations}** deviations flagged in the process")
+    st.markdown(f"##### ⚠️ You have **{num_deviations}** deviation(s) flagged in the process")
 else:
     st.markdown(f"##### ⚠️ No process deviation yet, time to check the monitoring ?")
