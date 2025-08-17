@@ -11,7 +11,6 @@ def simulation_page():
 
     st.set_page_config(
         page_title="Blend Simulator",
-        page_icon="📚",
         layout="wide",
         initial_sidebar_state="collapsed"
     )
@@ -35,12 +34,8 @@ def simulation_page():
         st.subheader("Selected Row Details")
         st.dataframe(selected_row[COMPONENT_NAMES].transpose())
 
-
-
-
-
         if "selected_id" not in st.session_state:
-            st.session_state.selected_id = INIT_ID 
+            st.session_state.selected_id = None
             st.session_state.metric_df=None
 
 
@@ -83,13 +78,13 @@ def simulation_page():
 
 
                 if selection=="Cost":
-                    st.metric(label=selection, value=new_value_min, delta=round(new_value_min-st.session_state.init_cost,2), border=True,delta_color="inverse")
+                    st.metric(label=selection, value=f'{round(new_value_min,2)} $/l', delta=round(new_value_min-st.session_state.init_cost,2), border=True,delta_color="inverse")
                 elif selection=="Performance":
-                    st.metric(label=selection, value=new_value_max, delta=round(new_value_max-st.session_state.init_perf,2), border=True)
+                    st.metric(label=selection, value=f'{round(new_value_max*100)} %', delta=round(new_value_max-st.session_state.init_perf,2), border=True)
                 elif selection=="Sustainability":
-                    st.metric(label=selection, value=new_value_max, delta=round(new_value_max-st.session_state.init_sus,2), border=True)
+                    st.metric(label=selection, value=f'{round(new_value_max*100)} %', delta=round(new_value_max-st.session_state.init_sus,2), border=True)
                 elif selection=="Safety":
-                    st.metric(label=selection, value=new_value_max, delta=round(new_value_max-st.session_state.init_safe,2), border=True)
+                    st.metric(label=selection, value=f'{round(new_value_max*100)} %', delta=round(new_value_max-st.session_state.init_safe,2), border=True)
             with col_frac:
                 if selection=="Cost":
                     st.dataframe(df_selected_min[COMPONENT_NAMES].transpose())

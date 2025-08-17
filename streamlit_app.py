@@ -22,7 +22,7 @@ def login():
         layout="centered",
         initial_sidebar_state="collapsed"
     )
-    st.logo("images/logo_page.png")
+    
     col1,col2=st.columns(2)
 
     with col1:
@@ -53,9 +53,9 @@ ds_readme_page = st.Page(
     default=(role == "Data Scientist"),
 )
 
-model_page = st.Page("ds/model.py", title="Model", icon=":material/folder:")
-explain_page = st.Page("ds/explainability.py", title="Explainability", icon=":material/folder:")
-report_page = st.Page("ds/report.py", title="Report", icon=":material/folder:")
+model_page = st.Page("ds/model.py", title="Model", icon=":material/modeling:")
+explain_page = st.Page("ds/explainability.py", title="Explainability", icon=":material/graph_1:")
+report_page = st.Page("ds/report.py", title="Report", icon=":material/report:")
 
 fe_readme_page = st.Page(
     "fe/read_me.py",
@@ -63,8 +63,8 @@ fe_readme_page = st.Page(
     icon=":material/home:",
     default=(role == "Fuel Engineer"),
 )
-monitoring_page = st.Page("pe/monitoring.py", title="Monitoring", icon=":material/folder:")
-document_page = st.Page("pe/document.py", title="Report", icon=":material/folder:")
+monitoring_page = st.Page("pe/monitoring.py", title="Monitoring", icon=":material/monitor:")
+document_page = st.Page("pe/document.py", title="Report", icon=":material/bug_report:")
 
 pe_readme_page = st.Page(
     "pe/read_me.py",
@@ -72,9 +72,9 @@ pe_readme_page = st.Page(
     icon=":material/home:",
     default=(role == "Process Engineer"),
 )
-library_page = st.Page("fe/library.py", title="Library", icon=":material/folder:")
-design_page = st.Page("fe/design.py", title="Design", icon=":material/folder:")
-simulation_page = st.Page("fe/simulation.py", title="Simulation", icon=":material/folder:")
+library_page = st.Page("fe/library.py", title="Library", icon=":material/database:")
+design_page = st.Page("fe/design.py", title="Design", icon=":material/experiment:")
+simulation_page = st.Page("fe/simulation.py", title="Simulation", icon=":material/candlestick_chart:")
 
 account_pages = [logout_page]
 ds_pages=[ds_readme_page,model_page,explain_page,report_page]

@@ -7,7 +7,6 @@ import tabular_transformer as tm
 import base_models as bm
 import joblib
 
-#import tensorflow as tf
 
 
 
@@ -27,6 +26,25 @@ comp_dict={
 "component3_fraction":"Synthetic Fuel Fraction",
 "component4_fraction":"Additives Fraction",
 "component5_fraction":"Waste Oil Fraction",
+}
+
+
+compliance_criteria = {
+    "Density": (1.0, 3.0),  # Example range for normalized density
+    "Viscosity": (0.5, 2.5),  # Example range for normalized viscosity
+    "Heating Value": (2.0, 4.0),  # Example range for normalized heating value
+    "Cetane Number": (1.0, 3.0),  # Example range for cetane number
+    "Freezing Point": (-4.0, 0.0),  # Example range for freezing point
+    "Smoke Point": (2.0, 4.0),  # Example range for smoke point
+    "Thermal Stability": (1.0, 3.0),  # Example range for thermal stability
+    "Water Content": (0.0, 1.0),  # Example range for water content
+    "Particulate Matter": (0.0, 1.0),  # Example range for particulate matter
+    "Corrosiveness": (0.0, 2.0),  # Example range for corrosiveness
+    "Diesel Fraction": (0.0, 2.0),  # Example range for diesel fraction
+    "Biofuel Fraction": (0.0, 2.0),  # Example range for biofuel fraction
+    "Synthetic Fuel Fraction": (0.0, 2.0),  # Example range for synthetic fuel fraction
+    "Additives Fraction": (0.0, 1.0),  # Example range for additives fraction
+    "Waste Oil Fraction": (0.0, 1.0),  # Example range for waste oil fraction
 }
 
 COMP_COST=[3,5,6,0.5,0]
@@ -54,6 +72,13 @@ def load_model_func(model_path):
 def read_dataset(path):
     return pd.read_csv(path)
 
+def check_compliance(row):
+    for property_name, (min_threshold, max_threshold) in compliance_criteria.items():
+        if not (min_threshold <= row[property_name] <= max_threshold):
+            return False
+    return True
+
+
 def generate_random_fractions(alpha=[1, 1, 1, 1, 1], num_samples=10):
     valid_samples = []
     lower_bounds = np.array([0.0, 0.0, 0.0, 0.05, 0.0])
@@ -69,16 +94,21 @@ def generate_random_fractions(alpha=[1, 1, 1, 1, 1], num_samples=10):
     return np.array(valid_samples)
 
 def calculate_metrics(X,X_comp):
-
+    X.columns=PROPERTY_NAMES
     scaler=MinMaxScaler()
-    df_scaled = pd.DataFrame(scaler.fit_transform(X), columns=PROPERTY_NAMES)
-
-    performance=df_scaled["Heating Value"]*df_scaled["Cetane Number"]*(1-df_scaled["Viscosity"])
-    safety=(1-df_scaled["Freezing Point"])
-    sustainability=(1-df_scaled["Water Content"])*(1-df_scaled["Particulate Matter"])
+    df_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+    x_comp_scaled=pd.DataFrame(scaler.fit_transform(X_comp), columns=X_comp.columns)
+    print(x_comp_scaled)
+    performance=df_scaled["Heating Value"]*df_scaled["Cetane Number"]*(1-df_scaled["Viscosity"])*(x_comp_scaled["Diesel Fraction"])
+    safety=(
+    (1 - df_scaled["Freezing Point"]) * 
+    (1 - df_scaled["Thermal Stability"])
+    )
+    sustainability=(1-df_scaled["Water Content"])*(1-df_scaled["Particulate Matter"])*(x_comp_scaled["Biofuel Fraction"])*(x_comp_scaled["Synthetic Fuel Fraction"])
     cost=X_comp[COMPONENT_NAMES].multiply(COMP_COST).sum(axis=1)
+    compliant = pd.concat([X,X_comp],axis=1).apply(check_compliance, axis=1)
 
-    return round(performance,2),round(safety,2),round(sustainability,2),round(cost,2)
+    return round(performance,2),round(safety,2),round(sustainability,2),round(cost,2),round(compliant,2)
 
 def get_predictions_for_blend(X):
 
@@ -113,9 +143,9 @@ class BlendDataset():
 
     def add_metrics(self,df,predicted=False):
         if predicted:
-            df["Performance"],df["Safety"],df["Sustainability"],df["Cost"]=calculate_metrics(df[PREDICTED_PROPERTY_NAMES],df[COMPONENT_NAMES])
+            df["Performance"],df["Safety"],df["Sustainability"],df["Cost"],df["compliant"]=calculate_metrics(df[PREDICTED_PROPERTY_NAMES],df[COMPONENT_NAMES])
         else:
-            df["Performance"],df["Safety"],df["Sustainability"],df["Cost"]=calculate_metrics(df[PROPERTY_NAMES],df[COMPONENT_NAMES])
+            df["Performance"],df["Safety"],df["Sustainability"],df["Cost"],df["compliant"]=calculate_metrics(df[PROPERTY_NAMES],df[COMPONENT_NAMES])
 
         return df
 

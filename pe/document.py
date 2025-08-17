@@ -15,11 +15,6 @@ def document_page():
         initial_sidebar_state="collapsed"
     )
     
-    _,col2,_=st.columns([5,1,5])
-    with col2:
-        st.image("./images/construction.png")
-
-
     # Create a form for incident reporting
     with st.form(key='incident_form'):
         st.write("Please fill in the details of the incident:")

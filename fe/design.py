@@ -9,7 +9,6 @@ def design_page():
     remove_top()
     st.set_page_config(
         page_title="Blend Design",
-        #page_icon="📚",
         layout="wide",
         initial_sidebar_state="collapsed"
     )
@@ -66,13 +65,13 @@ def design_page():
         st.subheader("Calculated metrics and volume fractions")
         col21,col22,col23,col24=st.columns(4)
         with col21:
-            st.metric(label="Performance", value=closest_row["Performance"],border=True)
+            st.metric(label="Performance", value=f'{round(closest_row["Performance"] * 100):.0f} %',border=True)
         with col22:
-            st.metric(label="Safety", value=closest_row["Safety"],border=True)
+            st.metric(label="Safety", value=f'{round(closest_row["Safety"] * 100):.0f} %',border=True)
         with col23:
-            st.metric(label="Sustainability", value=closest_row["Sustainability"],border=True)
+            st.metric(label="Sustainability", value=f'{round(closest_row["Sustainability"] * 100):.0f} %',border=True)
         with col24:
-            st.metric(label="Cost", value=closest_row["Cost"],border=True)
+            st.metric(label="Cost", value=f'{round(closest_row["Cost"] ,2):.2f} $/l',border=True)
             # Property names
 
 

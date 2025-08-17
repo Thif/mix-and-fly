@@ -104,7 +104,7 @@ def library_page():
             )
             st.plotly_chart(fig)
         else:
-            st.write("Please click on a point in the ternary plot to see details")
+            st.subheader("Please click on a point in the ternary plot to see details 👀")
 
 
 library_page()

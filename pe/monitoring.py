@@ -27,7 +27,6 @@ def monitoring_page():
     remove_top()
     st.set_page_config(
         page_title="Blend Real-Time Monitoring",
-        #page_icon="📚",
         layout="wide",
         initial_sidebar_state="collapsed"
     )
@@ -64,10 +63,10 @@ def monitoring_page():
 
             target_density,target_pm=selected_row[["Density (Predicted)","Particulate Matter (Predicted)"]].values[0]
         
-        if st.button("Start Streaming"):
+        if st.button("▶️ Start Streaming"):
             st.session_state.streaming = True  # Set streaming state to True
 
-        if st.button("Stop Streaming"):
+        if st.button("⏹️ Stop Streaming"):
             st.session_state.streaming = False  # Set streaming state to False
 
 
@@ -84,7 +83,7 @@ def monitoring_page():
         # Initialize streaming state if not already set
         if 'streaming' not in st.session_state or total!=1:
             st.session_state.streaming = False
-            st.write("Press start streaming")
+            st.subheader("Click the 'Start streaming' button to start monitoring !")
 
         col31,col32=st.columns([2,1])
 
@@ -208,7 +207,7 @@ def monitoring_page():
                     y=y_target[-max_steps:],
                     mode='lines+text',
                     name='Max Threshold',
-                    line=dict(color='teal', width=1, dash='dash'),  # Dashed line for the threshold
+                    line=dict(color='teal', width=2, dash='dash'),  # Dashed line for the threshold
                     #text=f'Target: {target_density:.2f}',  # Text above the line
                     textposition='top center'  # Position the text above the line
                 ))
@@ -241,7 +240,7 @@ def monitoring_page():
                     y=y_target_pm[-max_steps:],
                     mode='lines+text',
                     name='Max Threshold',
-                    line=dict(color='teal', width=1, dash='dash'),  # Dashed line for the threshold
+                    line=dict(color='teal', width=2, dash='dash'),  # Dashed line for the threshold
                     #text=f'Target: {target_density:.2f}',  # Text above the line
                     textposition='top center'  # Position the text above the line
                 ))

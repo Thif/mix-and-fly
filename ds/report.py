@@ -14,9 +14,11 @@ def report_page():
         initial_sidebar_state="collapsed"
     )
     remove_top()
-    _,col2,_=st.columns([5,1,5])
+    col1,col2=st.columns([1,6])
+    with col1:
+        st.image("./images/logo_page.png")
     with col2:
-        st.image("./images/construction.png")
+        st.title("🚧 Page under construction 🚧")
         
     # File uploader for PDF report
     pdf_file = st.file_uploader("Upload PDF Report", type=["pdf"])
