@@ -22,7 +22,7 @@ def login():
         layout="centered",
         initial_sidebar_state="collapsed"
     )
-    st.logo("images/logo.png")
+    st.logo("images/logo_page.png")
     col1,col2=st.columns(2)
 
     with col1:
