@@ -1,0 +1,7 @@
+[theme]
+base = "dark"
+primaryColor = "#1ABC9C" # Teal (blend of green & blue)
+backgroundColor = "#0E1117" # Dark background
+secondaryBackgroundColor = "#1C2833" # Sidebar slightly lighter gray
+textColor = "#ECF0F1" # Light text
+font = "sans serif"
