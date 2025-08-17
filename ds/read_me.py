@@ -1,6 +1,5 @@
 import streamlit as st
 from page_utils import remove_top
-from ds.model import model_page
 
 remove_top()
 st.set_page_config(
