@@ -58,7 +58,7 @@ def library_page():
 
         # Create a ternary scatter plot
         fig = px.scatter_ternary(df, a="Safety", b="Performance", c="Sustainability", 
-                                    #color="Compliant",
+                                    color="Cost",
                                     size="Cost",
                                     opacity=0.8,
                                   labels={"Safety": "Safety", "Performance": "Performance", "Sustainability": "Sustainability"},
