@@ -61,7 +61,7 @@ def replace_column_names(col_name):
     # Split the column name by underscore if it contains multiple items
     new_name=col_name.lower()
     print(new_name)
-    for k,v in comp_dict_new.items():
+    for k,v in reversed(comp_dict_new.items()):
         new_name=new_name.replace(k,v)
     return new_name
 
