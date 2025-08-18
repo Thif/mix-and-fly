@@ -48,7 +48,7 @@ def simulation_page():
             st.session_state.init_sus=df_init["Sustainability"].values[0]
             st.session_state.init_cost=df_init["Cost"].values[0]
 
-            #generate random fractions
+            #generate random fractions here
             df = BD.generate_samples_from_id(df, selected_id)
             df = BD.add_properties(df)
             df=BD.rename_cols(df)
@@ -85,7 +85,7 @@ def simulation_page():
                 elif selection=="Sustainability":
                     st.metric(label="max "+selection, value=f'{round(new_value_max*100)} %', delta=f'{round(new_value_max-st.session_state.init_sus,2)*100} %', border=True)
                 elif selection=="Safety":
-                    st.metric(label="max "+selection, value=f'{round(new_value_max*100)} %', delta=f'{round(new_value_max-st.session_state.init_safe,2)} %', border=True)
+                    st.metric(label="max "+selection, value=f'{round(new_value_max*100)} %', delta=f'{round(new_value_max-st.session_state.init_safe,2)*100} %', border=True)
             with col_frac:
                 if selection=="Cost":
                     data_min=df_selected_min[COMPONENT_NAMES+["Compliant"]].iloc[0]
