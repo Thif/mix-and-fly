@@ -46,7 +46,7 @@ comp_dict_new={
 
 selection = st.pills(
     "Select one property:",
-    PROPERTY_NAMES,selection_mode="single")
+    PROPERTY_NAMES,selection_mode="single",default=PROPERTY_NAMES[0])
 
 # Load your dataset
 shap_df = pd.read_csv('data/shap_values.csv')  # Assuming these are the relevant features

@@ -24,7 +24,7 @@ def model_page():
         df_cv=load_data()
     selection = st.pills(
     "Select one or more property :",
-    PROPERTY_NAMES,selection_mode="multi")
+    PROPERTY_NAMES,selection_mode="multi",default=PROPERTY_NAMES[1:3])
 
     selected_props=[prop_dict[s] for s in selection]
     df_cv_filtered=df_cv[df_cv.property.isin(selected_props)]
