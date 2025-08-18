@@ -11,7 +11,7 @@ def design_page():
     st.set_page_config(
         page_title="Blend Design",
         layout="wide",
-        initial_sidebar_state="collapsed"
+      #  initial_sidebar_state="collapsed"
     )
 
 

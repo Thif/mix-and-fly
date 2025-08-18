@@ -20,7 +20,7 @@ def login():
         page_title="Login",
         #page_icon="📚",
         layout="centered",
-        initial_sidebar_state="collapsed"
+        #initial_sidebar_state="collapsed"
     )
     
     col1,col2=st.columns(2)

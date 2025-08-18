@@ -30,7 +30,7 @@ def monitoring_page():
     st.set_page_config(
         page_title="Blend Real-Time Monitoring",
         layout="wide",
-        initial_sidebar_state="collapsed"
+        #initial_sidebar_state="collapsed"
     )
 
     col1,col3=st.columns([1,4])

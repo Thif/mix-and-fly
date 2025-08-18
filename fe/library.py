@@ -21,7 +21,7 @@ def library_page():
         page_title="Blend Library",
 #        page_icon="📚",
         layout="wide",
-        initial_sidebar_state="collapsed"
+       # initial_sidebar_state="collapsed"
     )
 
     selected_index=None

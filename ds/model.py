@@ -18,7 +18,7 @@ def model_page():
         page_title="Blend Models",
        # page_icon="📚",
         layout="wide",
-        initial_sidebar_state="collapsed"
+       # initial_sidebar_state="collapsed"
     )
     with st.spinner():
         df_cv=load_data()
