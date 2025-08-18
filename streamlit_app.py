@@ -38,7 +38,7 @@ def login():
 
     with st.sidebar:
         # Create a feedback button
-        st.write("If you like this prototype or if you have improvement suggestions please let us know by using this feedback form")
+        st.write("If you like this prototype or if you have improvement suggestions please let us know by using this feedback form !")
         if st.button("Give Feedback 📝"):
             # Display a text area for feedback input
             feedback = st.text_area("Please provide your feedback below:", height=150)
