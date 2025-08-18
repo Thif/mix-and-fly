@@ -70,7 +70,7 @@ ds_readme_page = st.Page(
 
 model_page = st.Page("ds/model.py", title="Model", icon=":material/modeling:")
 explain_page = st.Page("ds/explainability.py", title="Explainability", icon=":material/graph_1:")
-report_page = st.Page("ds/report.py", title="Report", icon=":material/report:")
+report_page = st.Page("ds/report.py", title="Add blend", icon=":material/report:")
 
 fe_readme_page = st.Page(
     "fe/read_me.py",

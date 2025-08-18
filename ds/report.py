@@ -8,7 +8,7 @@ from page_utils import remove_top
 def report_page():
 
     st.set_page_config(
-        page_title="Add report",
+        page_title="Add blend",
         #page_icon="📚",
         layout="wide",
         initial_sidebar_state="collapsed"
