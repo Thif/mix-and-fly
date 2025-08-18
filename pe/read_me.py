@@ -6,7 +6,7 @@ st.set_page_config(
     page_title="Info",
 #        page_icon="📚",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    #initial_sidebar_state="collapsed"
 )
 
 st.header(f"{st.session_state.role} info page")
@@ -21,7 +21,7 @@ with st.expander("➕ Monitoring"):
     st.markdown("- Blend properties are simulated for the new fractions and used as target")
     st.markdown("- You can start the streaming !")
     st.markdown("- You visualize the values of the fractions and properties, together with their targets")
-    st.markdown("- In case of deviation, the faulty parameter is highlighted")
+    st.markdown("- In case of deviation, the faulty parameter is highlighted and the incident recorded")
     st.page_link("pe/monitoring.py", label="Go to page", icon="🚀")
 
 with st.expander("➕ Deviation summary"):

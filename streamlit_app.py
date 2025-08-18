@@ -36,6 +36,21 @@ def login():
             st.session_state.role = role
             st.rerun()
 
+    with st.sidebar:
+        # Create a feedback button
+        st.write("If you like this prototype or if you have improvement suggestions please let us know by using this feedback form")
+        if st.button("Give Feedback 📝"):
+            # Display a text area for feedback input
+            feedback = st.text_area("Please provide your feedback below:", height=150)
+            
+            # Create a submit button for the feedback
+            if st.button("Submit Feedback"):
+                if feedback:
+                    # Here you can add logic to save the feedback, e.g., to a file or database
+                    st.success("Thank you for your feedback!")
+                    st.write("Your feedback: ", feedback)
+                else:
+                    st.warning("Please enter your feedback before submitting.")
 
 def logout():
     st.session_state.role = None

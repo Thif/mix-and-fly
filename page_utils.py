@@ -12,6 +12,5 @@ def remove_top():
     </style>
     """, unsafe_allow_html=True)
 
-    if st.session_state.role is not None:
-        st.logo("images/logo_page.png")
+    st.logo("images/logo_page.png")
 

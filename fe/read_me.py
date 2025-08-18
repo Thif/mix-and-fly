@@ -7,7 +7,7 @@ st.set_page_config(
     page_title="Info",
 #        page_icon="📚",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    #initial_sidebar_state="collapsed"
 )
 
 st.header(f"{st.session_state.role} info page")
@@ -39,6 +39,7 @@ with st.expander("➕ Design"):
     st.write("This tool complements the simulation, this time by providing the volume fractions needed to achieve a specific set of blend properties")
     st.markdown("- Select the blend property values you want to achieve")
     st.markdown("- The model will find the corresponding volume fractions and display the calculated metrics for that blend")
+    st.markdown("- The current blend can be added to favorites for further investigations")
     st.page_link("fe/design.py", label="Go to page", icon="🚀")
 
 # Example session state for favorites

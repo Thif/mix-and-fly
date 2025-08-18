@@ -6,7 +6,7 @@ st.set_page_config(
     page_title="Info",
 #        page_icon="📚",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    #initial_sidebar_state="collapsed"
 )
 
 st.header(f"{st.session_state.role} info page")
