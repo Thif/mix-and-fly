@@ -79,13 +79,13 @@ def simulation_page():
 
 
                 if selection=="Cost":
-                    st.metric(label="min "+selection, value=f'{round(new_value_min,2)} $/l', delta=round(new_value_min-st.session_state.init_cost,2), border=True,delta_color="inverse")
+                    st.metric(label="min "+selection, value=f'{round(new_value_min,2)} $/l', delta=f'{round(new_value_min-st.session_state.init_cost,2)} $/l', border=True,delta_color="inverse")
                 elif selection=="Performance":
-                    st.metric(label="max "+selection, value=f'{round(new_value_max*100)} %', delta=round(new_value_max-st.session_state.init_perf,2), border=True)
+                    st.metric(label="max "+selection, value=f'{round(new_value_max*100)} %', delta=f'{round(new_value_max-st.session_state.init_perf,2)*100} %', border=True)
                 elif selection=="Sustainability":
-                    st.metric(label="max "+selection, value=f'{round(new_value_max*100)} %', delta=round(new_value_max-st.session_state.init_sus,2), border=True)
+                    st.metric(label="max "+selection, value=f'{round(new_value_max*100)} %', delta=f'{round(new_value_max-st.session_state.init_sus,2)*100} %', border=True)
                 elif selection=="Safety":
-                    st.metric(label="max "+selection, value=f'{round(new_value_max*100)} %', delta=round(new_value_max-st.session_state.init_safe,2), border=True)
+                    st.metric(label="max "+selection, value=f'{round(new_value_max*100)} %', delta=f'{round(new_value_max-st.session_state.init_safe,2)} %', border=True)
             with col_frac:
                 if selection=="Cost":
                     data_min=df_selected_min[COMPONENT_NAMES+["Compliant"]].iloc[0]
