@@ -65,9 +65,9 @@ def library_page():
                                   hover_name="ID",
                                           width=500,  
         height=500 ,
-        #color_continuous_scale='GnBu'
+        color_continuous_scale='GnBu'
         )
-        fig.update_traces(marker=dict(color="teal",size=10))
+        #fig.update_traces(marker=dict(color="teal",size=10))
 
 
 
